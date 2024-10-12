@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useMemo, useState } from 'react';
+import { ScrollView, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 
@@ -22,8 +22,24 @@ const Signup = () => {
   };
 
   const navigateToOTP = () => {
+    if (!formValid) {
+      Alert.alert('Form Empty Detected', 'Please fill the empty field');
+      return;
+    }
     navigation.navigate('OTPVerification');
-  }
+  };
+
+  const formValid = useMemo(() => {
+    const isValid = firstName !== '' &&
+    lastName !== '' &&
+    phoneNumber !== '' &&
+    email !== '' &&
+    password !== '' &&
+    country !== '';
+
+    return isValid;
+
+  }, [country, email, firstName, lastName, password, phoneNumber]);
 
   return (
     <ScrollView style={styles.container}>
@@ -87,7 +103,7 @@ const Signup = () => {
         }}
         onPress={() => setIsModalVisible(true)}
       >
-        <TextInput.Icon icon="eye" style={{marginLeft: 35}} />
+        <TextInput.Icon icon="google-earth" style={{marginLeft: 35}} />
         <Text style={{ fontSize: 16, marginLeft: 30, color: 'black'}}>{country ? country : 'Select Country'}</Text>
       </TouchableOpacity>
 
